@@ -4,11 +4,20 @@ from model_utils import get_network
 
 
 def get_device():
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    device = "cuda" if torch.cuda.is_available() else "cpu"
     return device
 
-def train_model(model, train_loader, optimizer, criterion, device, n_epochs,path='./cifar_model.pth'):
-    print('Training started.')
+
+def train_model(
+    model,
+    train_loader,
+    optimizer,
+    criterion,
+    device,
+    n_epochs,
+    path="./cifar_model.pth",
+):
+    print("Training started.")
     model = model.to(device)
     model.train()
     for i in tqdm(range(n_epochs)):
@@ -20,12 +29,13 @@ def train_model(model, train_loader, optimizer, criterion, device, n_epochs,path
             loss.backward()
             optimizer.step()
 
-    print(f'Finished Training. Model saved to {path} .')
+    print(f"Finished Training. Model saved to {path} .")
     torch.save(net.state_dict(), path)
     return model
 
-def validate_model(val_loader, device, model_path='./cifar_model.pth'):
-    print('Validation started')
+
+def validate_model(val_loader, device, model_path="./cifar_model.pth"):
+    print("Validation started")
     model = get_network()
     model = model.load_state_dict(torch.load(model_path)).to(device)
     model.eval()
@@ -41,4 +51,4 @@ def validate_model(val_loader, device, model_path='./cifar_model.pth'):
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
 
-    print(f'Accuracy of the network on test images: {100 * correct // total} %')
+    print(f"Accuracy of the network on test images: {100 * correct // total} %")
